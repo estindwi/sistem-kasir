@@ -21,6 +21,10 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/components', function () {
+        return view('components-preview');
+    })->name('components.preview');
+
     Route::get('/dashboard', function () {
         return 'Selamat datang di Dashboard Sistem Kasir Hidroponik!';
     })->name('dashboard');
