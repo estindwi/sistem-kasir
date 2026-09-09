@@ -3,12 +3,21 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+
 use App\Repositories\RepositoryInterface\UserRepositoryInterface;
 use App\Repositories\UserRepository;
+
 use App\Repositories\RepositoryInterface\ProdukRepositoryInterface;
 use App\Repositories\ProdukRepository;
+
 use App\Repositories\RepositoryInterface\TransaksiPenjualanRepositoryInterface;
 use App\Repositories\TransaksiPenjualanRepository;
+
+use App\Repositories\RepositoryInterface\KategoriPengeluaranRepositoryInterface;
+use App\Repositories\KategoriPengeluaranRepository;
+
+use App\Repositories\RepositoryInterface\PengeluaranRepositoryInterface;
+use App\Repositories\PengeluaranRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +36,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             TransaksiPenjualanRepositoryInterface::class,
             TransaksiPenjualanRepository::class
+        );
+
+        $this->app->bind(
+            KategoriPengeluaranRepositoryInterface::class,
+            KategoriPengeluaranRepository::class
+        );
+
+        $this->app->bind(
+            PengeluaranRepositoryInterface::class,
+            PengeluaranRepository::class
         );
     }
 

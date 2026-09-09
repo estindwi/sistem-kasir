@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiPenjualanController;
+use App\Http\Controllers\KategoriPengeluaranController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -59,4 +60,22 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/transaksi/{id}/complete', [TransaksiPenjualanController::class, 'complete'])
     ->name('transaksi.complete');    
+
+    Route::get('/kategori-pengeluaran', [KategoriPengeluaranController::class, 'index'])
+    ->name('kategori-pengeluaran.index');
+
+    Route::get('/kategori-pengeluaran/create', [KategoriPengeluaranController::class, 'create'])
+        ->name('kategori-pengeluaran.create');
+
+    Route::post('/kategori-pengeluaran', [KategoriPengeluaranController::class, 'store'])
+        ->name('kategori-pengeluaran.store');
+
+    Route::get('/kategori-pengeluaran/{id}/edit', [KategoriPengeluaranController::class, 'edit'])
+        ->name('kategori-pengeluaran.edit');
+
+    Route::put('/kategori-pengeluaran/{id}', [KategoriPengeluaranController::class, 'update'])
+        ->name('kategori-pengeluaran.update');
+
+    Route::delete('/kategori-pengeluaran/{id}', [KategoriPengeluaranController::class, 'destroy'])
+        ->name('kategori-pengeluaran.destroy');
 });
