@@ -6,10 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('pengeluaran', function (Blueprint $table) {
+
             $table->id();
+
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
 
             $table->foreignId('kategori_id')
                 ->constrained('kategori_pengeluaran')
@@ -19,12 +27,16 @@ return new class extends Migration
 
             $table->decimal('jumlah', 15, 2);
 
-            $table->text('keterangan')->nullable();
+            $table->text('keterangan')
+                ->nullable();
 
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('pengeluaran');
