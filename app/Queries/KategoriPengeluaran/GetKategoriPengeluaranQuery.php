@@ -2,20 +2,15 @@
 
 namespace App\Queries\KategoriPengeluaran;
 
-use App\Repositories\RepositoryInterface\KategoriPengeluaranRepositoryInterface;
+use App\Models\KategoriPengeluaran;
 
 class GetKategoriPengeluaranQuery
 {
-    protected $kategoriRepository;
-
-    public function __construct(
-        KategoriPengeluaranRepositoryInterface $kategoriRepository
-    ) {
-        $this->kategoriRepository = $kategoriRepository;
-    }
-
     public function execute()
     {
-        return $this->kategoriRepository->all();
+        return KategoriPengeluaran::withCount('pengeluaran')
+            ->withSum('pengeluaran', 'jumlah')
+            ->orderBy('nama_kategori')
+            ->get();
     }
 }

@@ -31,7 +31,9 @@
 
     <a
         href="{{ $href }}"
-        class="ui-button {{ $variantClass }} {{ $sizeClass }}"
+        {{ $attributes->merge([
+            'class' => "ui-button {$variantClass} {$sizeClass}"
+        ]) }}
     >
         {{ $slot }}
     </a>
@@ -40,7 +42,9 @@
 
     <button
         type="{{ $type }}"
-        class="ui-button {{ $variantClass }} {{ $sizeClass }}"
+        {{ $attributes->merge([
+            'class' => "ui-button {$variantClass} {$sizeClass}"
+        ]) }}
     >
         {{ $slot }}
     </button>

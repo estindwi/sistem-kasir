@@ -1,167 +1,387 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buat Transaksi - Sistem Kasir Hidroponik</title>
+<x-layout active="transaksi">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <x-breadcrumb
+        :items="[
+            ['label' => 'Transaksi', 'url' => route('transaksi.index')],
+            ['label' => 'Buat Transaksi']
+        ]"
+    />
 
-    <style>
-        body {
-            background-color: #f5f7f6;
-        }
+    <x-page-header
+        title="Buat Transaksi Penjualan"
+        description="Buat transaksi baru dan tambahkan produk yang dibeli."
+    >
+        <x-button
+            variant="outline-secondary"
+            :href="route('transaksi.index')"
+        >
+            <x-icon name="lucide:arrow-left" />
+            Kembali
+        </x-button>
+    </x-page-header>
 
-        .sidebar {
-            min-height: 100vh;
-            background-color: #198754;
-            color: white;
-        }
 
-        .sidebar .brand {
-            font-size: 20px;
-            font-weight: bold;
-            padding: 20px;
-        }
+    <x-card>
 
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            padding: 12px 20px;
-        }
+        <div class="create-content">
 
-        .sidebar a:hover,
-        .sidebar a.active {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
+            <div class="create-info">
 
-        .content {
-            padding: 30px;
-        }
+                <div class="create-info-icon">
+                    <x-icon name="lucide:shopping-cart" />
+                </div>
 
-        .card {
-            border: none;
-            border-radius: 12px;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container-fluid">
-    <div class="row">
-
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 sidebar p-0">
-
-            <div class="brand">
-                🌱 Kasir Hidroponik
-            </div>
-
-            <a href="{{ route('dashboard') }}">
-                Dashboard
-            </a>
-
-            <a href="{{ route('produk.index') }}">
-                Produk
-            </a>
-
-            <a href="{{ route('transaksi.index') }}" class="active">
-                Transaksi Penjualan
-            </a>
-
-            <a href="#">
-                Pengeluaran
-            </a>
-
-            <a href="#">
-                Laporan Keuangan
-            </a>
-
-            <form action="{{ route('logout') }}" method="POST" class="mt-3 px-3">
-                @csrf
-                <button type="submit" class="btn btn-light w-100">
-                    Logout
-                </button>
-            </form>
-
-        </div>
-
-        <!-- Content -->
-        <div class="col-md-9 col-lg-10 content">
-
-            <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h3 class="mb-1">Buat Transaksi Penjualan</h3>
+                    <h5 class="mb-1">
+                        Transaksi Baru
+                    </h5>
+
                     <p class="text-muted mb-0">
-                        Buat transaksi penjualan baru
+                        Klik tombol di bawah untuk membuat transaksi.
+                        Produk dan jumlahnya akan ditambahkan pada langkah berikutnya.
                     </p>
                 </div>
 
-                <a href="{{ route('transaksi.index') }}" class="btn btn-secondary">
-                    ← Kembali
-                </a>
             </div>
 
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
 
-                    <form action="{{ route('transaksi.store') }}" method="POST">
-                        @csrf
+            <div class="transaction-time">
 
-                        <div class="mb-3">
-                            <label for="tanggal_transaksi" class="form-label">
-                                Tanggal Transaksi
-                            </label>
+                <div class="time-icon">
+                    <x-icon name="lucide:calendar-clock" />
+                </div>
 
-                            <input
-                                type="datetime-local"
-                                name="tanggal_transaksi"
-                                id="tanggal_transaksi"
-                                class="form-control @error('tanggal_transaksi') is-invalid @enderror"
-                                value="{{ old('tanggal_transaksi', now()->format('Y-m-d\TH:i')) }}"
-                            >
+                <div>
+                    <span class="time-label">
+                        Tanggal & Waktu Transaksi
+                    </span>
 
-                            @error('tanggal_transaksi')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
+                    <strong id="transaction-time">
+                        {{ now()->format('d/m/Y H:i') }}
+                    </strong>
 
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Total
-                            </label>
+                    <small>
+                        Waktu transaksi diambil otomatis saat transaksi dibuat.
+                    </small>
+                </div>
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="Rp 0"
-                                disabled
-                            >
+            </div>
 
-                            <div class="form-text">
-                                Produk dan total transaksi akan ditambahkan setelah transaksi dibuat.
-                            </div>
-                        </div>
 
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success">
-                                Buat Transaksi
-                            </button>
-                        </div>
+            <div class="transaction-flow">
 
-                    </form>
+                <div class="flow-item active">
+
+                    <span class="flow-number">
+                        1
+                    </span>
+
+                    <div>
+                        <strong>Buat transaksi</strong>
+                        <small>Mulai transaksi baru</small>
+                    </div>
 
                 </div>
+
+
+                <div class="flow-line"></div>
+
+
+                <div class="flow-item">
+
+                    <span class="flow-number">
+                        2
+                    </span>
+
+                    <div>
+                        <strong>Tambah produk</strong>
+                        <small>Pilih produk dan jumlah</small>
+                    </div>
+
+                </div>
+
+
+                <div class="flow-line"></div>
+
+
+                <div class="flow-item">
+
+                    <span class="flow-number">
+                        3
+                    </span>
+
+                    <div>
+                        <strong>Selesaikan</strong>
+                        <small>Konfirmasi transaksi</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <x-button
+                    variant="outline-secondary"
+                    :href="route('transaksi.index')"
+                >
+                    Batal
+                </x-button>
+
+                <form
+                    action="{{ route('transaksi.store') }}"
+                    method="POST"
+                >
+                    @csrf
+
+                    <x-button
+                        variant="success"
+                        type="submit"
+                    >
+                        <x-icon name="lucide:plus" />
+                        Buat Transaksi
+                    </x-button>
+                </form>
+
             </div>
 
         </div>
 
-    </div>
-</div>
+    </x-card>
 
-</body>
-</html>
+
+    <style>
+
+        .create-content {
+            width: 100%;
+        }
+
+
+        .create-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            padding: 16px 18px;
+
+            border-radius: 12px;
+            background: #f3f8f4;
+        }
+
+
+        .create-info-icon {
+            width: 46px;
+            height: 46px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 12px;
+
+            background: #e1f0e4;
+            color: #2e7d32;
+        }
+
+
+        .create-info-icon iconify-icon {
+            font-size: 23px;
+        }
+
+
+        .transaction-time {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            margin-top: 20px;
+            padding: 18px;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+
+            background: #ffffff;
+        }
+
+
+        .time-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            background: #f1f8f2;
+            color: #2e7d32;
+        }
+
+
+        .time-icon iconify-icon {
+            font-size: 20px;
+        }
+
+
+        .time-label {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        .transaction-time strong {
+            display: block;
+
+            color: #374151;
+
+            font-size: 18px;
+        }
+
+
+        .transaction-time small {
+            display: block;
+
+            margin-top: 3px;
+
+            color: #9ca3af;
+
+            font-size: 12px;
+        }
+
+
+        .transaction-flow {
+            display: flex;
+            align-items: center;
+
+            margin-top: 28px;
+            padding: 20px;
+
+            border-radius: 12px;
+
+            background: #fafafa;
+        }
+
+
+        .flow-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            flex: 1;
+        }
+
+
+        .flow-number {
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: #ecefee;
+            color: #9ca3af;
+
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+
+        .flow-item.active .flow-number {
+            background: #2e7d32;
+            color: #ffffff;
+        }
+
+
+        .flow-item strong {
+            display: block;
+
+            color: #374151;
+
+            font-size: 13px;
+        }
+
+
+        .flow-item small {
+            display: block;
+
+            margin-top: 2px;
+
+            color: #9ca3af;
+
+            font-size: 11px;
+        }
+
+
+        .flow-line {
+            width: 45px;
+            height: 1px;
+
+            flex-shrink: 0;
+
+            margin: 0 14px;
+
+            background: #dfe3e0;
+        }
+
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+
+            margin-top: 28px;
+            padding-top: 20px;
+
+            border-top: 1px solid #e5e7eb;
+        }
+
+
+        @media (max-width: 768px) {
+
+            .transaction-flow {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+
+            .flow-line {
+                width: 1px;
+                height: 22px;
+
+                margin: 0 0 0 16px;
+            }
+
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+
+            .form-actions > *,
+            .form-actions form,
+            .form-actions form .ui-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</x-layout>

@@ -1,227 +1,226 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<x-layout active="produk">
 
-    <title>Tambah Produk - Sistem Kasir Hidroponik</title>
+    {{-- BREADCRUMB --}}
+    <x-breadcrumb
+        :items="[
+            [
+                'label' => 'Produk',
+                'url' => route('produk.index')
+            ],
+            [
+                'label' => 'Tambah Produk'
+            ]
+        ]"
+    />
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+
+    {{-- PAGE HEADER --}}
+    <x-page-header
+        title="Tambah Produk"
+        description="Tambahkan produk hidroponik baru ke dalam sistem."
+    />
+
+
+    {{-- VALIDATION ERROR --}}
+    @if($errors->any())
+
+        <x-alert type="danger">
+
+            <div>
+                <div class="fw-semibold mb-1">
+                    Periksa kembali input
+                </div>
+
+                <ul class="mb-0 ps-3">
+
+                    @foreach($errors->all() as $error)
+
+                        <li>
+                            {{ $error }}
+                        </li>
+
+                    @endforeach
+
+                </ul>
+            </div>
+
+        </x-alert>
+
+    @endif
+
+
+    {{-- FORM --}}
+    <x-card title="Informasi Produk">
+
+        <form
+            action="{{ route('produk.store') }}"
+            method="POST"
+        >
+
+            @csrf
+
+
+            {{-- NAMA PRODUK --}}
+            <div class="mb-4">
+
+                <label
+                    for="nama_produk"
+                    class="form-label fw-semibold"
+                >
+                    Nama Produk
+                </label>
+
+                <input
+                    type="text"
+                    class="form-control"
+                    id="nama_produk"
+                    name="nama_produk"
+                    value="{{ old('nama_produk') }}"
+                    placeholder="Contoh: Selada Hidroponik"
+                    required
+                >
+
+                <div class="form-text">
+                    Masukkan nama produk hidroponik yang akan dijual.
+                </div>
+
+            </div>
+
+
+            {{-- HARGA & STOK --}}
+            <div class="row">
+
+                {{-- HARGA --}}
+                <div class="col-md-6 mb-4">
+
+                    <label
+                        for="harga"
+                        class="form-label fw-semibold"
+                    >
+                        Harga
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            Rp
+                        </span>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="harga"
+                            name="harga"
+                            value="{{ old('harga') }}"
+                            placeholder="15000"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-text">
+                        Harga jual produk dalam rupiah.
+                    </div>
+
+                </div>
+
+
+                {{-- STOK --}}
+                <div class="col-md-6 mb-4">
+
+                    <label
+                        for="stok"
+                        class="form-label fw-semibold"
+                    >
+                        Stok
+                    </label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="stok"
+                        name="stok"
+                        value="{{ old('stok') }}"
+                        placeholder="20"
+                        min="0"
+                        required
+                    >
+
+                    <div class="form-text">
+                        Jumlah stok awal produk.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            {{-- ACTION --}}
+            <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+
+                <x-button
+                    variant="outline-secondary"
+                    :href="route('produk.index')"
+                >
+                    <x-icon name="lucide:x" />
+                    Batal
+                </x-button>
+
+
+                <x-button
+                    variant="success"
+                    type="submit"
+                >
+                    <x-icon name="lucide:save" />
+                    Simpan Produk
+                </x-button>
+
+            </div>
+
+        </form>
+
+    </x-card>
+
 
     <style>
-        body {
-            background-color: #f5f7f6;
+
+        .form-label {
+            color: #344238;
+            font-size: 13px;
         }
 
-        .sidebar {
-            min-height: 100vh;
-            background: #198754;
+        .form-control,
+        .input-group-text {
+            min-height: 42px;
+
+            border-color: #dfe5e0;
+
+            font-size: 13px;
         }
 
-        .sidebar .brand {
-            color: white;
-            font-size: 20px;
-            font-weight: 700;
+        .form-control {
+            border-radius: 9px;
         }
 
-        .sidebar a {
-            color: rgba(255,255,255,.85);
-            text-decoration: none;
-            display: block;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 5px;
+        .input-group-text {
+            background: #f7faf7;
+            color: #667168;
         }
 
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: rgba(255,255,255,.15);
-            color: white;
+        .form-control:focus {
+            border-color: #81C784;
+            box-shadow: 0 0 0 .2rem rgba(46, 125, 50, .08);
         }
 
-        .content {
-            padding: 30px;
+        .form-text {
+            margin-top: 6px;
+
+            font-size: 11px;
+            color: #98a19b;
         }
 
-        .form-card {
-            border: none;
-            border-radius: 16px;
-        }
-
-        .page-title {
-            font-weight: 700;
-        }
-
-        .btn {
-            border-radius: 8px;
-        }
     </style>
-</head>
 
-<body>
-
-<div class="container-fluid">
-    <div class="row">
-
-        <!-- SIDEBAR -->
-        <div class="col-md-3 col-lg-2 sidebar p-3">
-
-            <div class="brand mb-4">
-                🌱 Hidroponik
-            </div>
-
-            <small class="text-white-50">MENU UTAMA</small>
-
-            <div class="mt-2">
-                <a href="{{ route('dashboard') }}">
-                    📊 Dashboard
-                </a>
-
-                <a href="{{ route('produk.index') }}" class="active">
-                    📦 Produk
-                </a>
-
-                <a href="#">
-                    🛒 Transaksi Penjualan
-                </a>
-
-                <a href="#">
-                    💸 Pengeluaran
-                </a>
-
-                <a href="#">
-                    📈 Laporan Keuangan
-                </a>
-            </div>
-
-            <hr class="text-white">
-
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button class="btn btn-outline-light w-100">
-                    Keluar
-                </button>
-            </form>
-
-        </div>
-
-        <!-- CONTENT -->
-        <div class="col-md-9 col-lg-10 content">
-
-            <div class="mb-4">
-                <h2 class="page-title">Tambah Produk</h2>
-                <p class="text-muted mb-0">
-                    Tambahkan produk hidroponik baru ke dalam sistem.
-                </p>
-            </div>
-
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Periksa kembali input:</strong>
-
-                    <ul class="mb-0 mt-2">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <div class="card form-card shadow-sm">
-                <div class="card-body p-4">
-
-                    <form action="{{ route('produk.store') }}" method="POST">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="nama_produk" class="form-label fw-semibold">
-                                Nama Produk
-                            </label>
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="nama_produk"
-                                name="nama_produk"
-                                value="{{ old('nama_produk') }}"
-                                placeholder="Contoh: Selada Hidroponik"
-                                required
-                            >
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-                                <label for="harga" class="form-label fw-semibold">
-                                    Harga
-                                </label>
-
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp</span>
-
-                                    <input
-                                        type="number"
-                                        class="form-control"
-                                        id="harga"
-                                        name="harga"
-                                        value="{{ old('harga') }}"
-                                        placeholder="15000"
-                                        min="0"
-                                        step="0.01"
-                                        required
-                                    >
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="stok" class="form-label fw-semibold">
-                                    Stok
-                                </label>
-
-                                <input
-                                    type="number"
-                                    class="form-control"
-                                    id="stok"
-                                    name="stok"
-                                    value="{{ old('stok') }}"
-                                    placeholder="20"
-                                    min="0"
-                                    required
-                                >
-                            </div>
-
-                        </div>
-
-                        <div class="d-flex justify-content-end gap-2 mt-3">
-
-                            <a
-                                href="{{ route('produk.index') }}"
-                                class="btn btn-light border px-4"
-                            >
-                                Batal
-                            </a>
-
-                            <button
-                                type="submit"
-                                class="btn btn-success px-4"
-                            >
-                                + Simpan Produk
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
-</body>
-</html>
+</x-layout>

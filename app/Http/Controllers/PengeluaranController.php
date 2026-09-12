@@ -41,7 +41,12 @@ class PengeluaranController extends Controller
     {
         $pengeluaran = $this->getPengeluaranQuery->execute();
 
-        return view('pengeluaran.index', compact('pengeluaran'));
+        $totalPengeluaran = $pengeluaran->sum('jumlah');
+
+        return view(
+            'pengeluaran.index',
+            compact('pengeluaran', 'totalPengeluaran')
+        );
     }
 
     public function create(): View

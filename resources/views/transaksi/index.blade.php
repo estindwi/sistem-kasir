@@ -1,187 +1,217 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaksi - Sistem Kasir Hidroponik</title>
+<x-layout active="transaksi">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+    <x-breadcrumb
+        :items="[
+            ['label' => 'Transaksi']
+        ]"
+    />
 
-<body>
+    <x-page-header
+        title="Transaksi Penjualan"
+        description="Riwayat transaksi penjualan hidroponik."
+    >
+        <x-button
+            variant="success"
+            :href="route('transaksi.create')"
+        >
+            <x-icon name="lucide:plus" />
+            Buat Transaksi
+        </x-button>
+    </x-page-header>
 
-<div class="d-flex">
+    <x-card>
 
-    <!-- SIDEBAR -->
-    <div class="bg-success text-white p-3 min-vh-100" style="width: 250px;">
+        <x-table>
 
-        <h4 class="mb-4">Kasir Hidroponik</h4>
+            <thead>
+                <tr>
+                    <th width="60">No</th>
+                    <th>Nomor Transaksi</th>
+                    <th>Tanggal</th>
+                    <th>Kasir</th>
+                    <th>Total</th>
+                    <th width="110">Status</th>
+                    <th width="100">Aksi</th>
+                </tr>
+            </thead>
 
-        <div class="mb-4">
-            <small>Selamat datang,</small>
-            <br>
-            <strong>{{ auth()->user()->nama }}</strong>
-        </div>
+            <tbody>
 
-        <div class="nav flex-column">
+                @forelse($transaksi as $item)
 
-            <a href="{{ route('dashboard') }}"
-               class="nav-link text-white mb-2">
-                🏠 Dashboard
-            </a>
+                    <tr>
 
-            <a href="{{ route('produk.index') }}"
-               class="nav-link text-white mb-2">
-                📦 Produk
-            </a>
+                        <td>
+                            {{ $loop->iteration }}
+                        </td>
 
-            <a href="{{ route('transaksi.index') }}"
-               class="nav-link active bg-white text-success rounded mb-2">
-                🛒 Transaksi
-            </a>
+                        <td>
+                            <div class="transaction-number">
+                                <x-icon name="lucide:receipt-text" />
+                                <strong>
+                                    {{ $item->nomor_transaksi }}
+                                </strong>
+                            </div>
+                        </td>
 
-            <a href="#"
-               class="nav-link text-white mb-2">
-                💸 Pengeluaran
-            </a>
+                        <td>
+                            <span class="text-muted">
+                                {{ $item->tanggal_transaksi->format('d-m-Y H:i') }}
+                            </span>
+                        </td>
 
-            <a href="#"
-               class="nav-link text-white mb-2">
-                📊 Laporan
-            </a>
+                        <td>
+                            <div class="cashier-name">
+                                <span class="cashier-icon">
+                                    <x-icon name="lucide:user-round" />
+                                </span>
 
-        </div>
+                                {{ $item->user->nama ?? '-' }}
+                            </div>
+                        </td>
 
-        <hr>
+                        <td>
+                            <strong>
+                                Rp {{ number_format($item->total, 0, ',', '.') }}
+                            </strong>
+                        </td>
 
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
+                        <td>
+                            @if ($item->status === 'completed')
+                                <x-badge variant="success">
+                                    Selesai
+                                </x-badge>
+                            @else
+                                <x-badge variant="warning">
+                                    Draft
+                                </x-badge>
+                            @endif
+                        </td>
 
-            <button type="submit" class="btn btn-light w-100">
-                Logout
-            </button>
-        </form>
+                        <td>
 
-    </div>
+                            <x-button
+                                variant="outline-success"
+                                size="sm"
+                                :href="route('transaksi.show', $item->id)"
+                                title="Lihat detail"
+                            >
+                                <x-icon name="lucide:eye" />
+                            </x-button>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+                                    <x-icon name="lucide:receipt-text" />
+                                </div>
+
+                                <div class="empty-title">
+                                    Belum ada transaksi
+                                </div>
+
+                                <div class="empty-description">
+                                    Belum ada transaksi penjualan yang tercatat.
+                                </div>
+
+                                <x-button
+                                    variant="success"
+                                    :href="route('transaksi.create')"
+                                >
+                                    <x-icon name="lucide:plus" />
+                                    Buat Transaksi
+                                </x-button>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </x-table>
+
+    </x-card>
 
 
-    <!-- CONTENT -->
-    <div class="flex-grow-1 p-4">
+    <style>
+        .transaction-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        .transaction-number iconify-icon {
+            color: #2e7d32;
+            font-size: 18px;
+        }
 
-            <div>
-                <h2>Transaksi Penjualan</h2>
-                <p class="text-muted mb-0">
-                    Riwayat transaksi penjualan hidroponik
-                </p>
-            </div>
+        .cashier-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-            <a href="{{ route('transaksi.create') }}"
-               class="btn btn-success">
-                + Buat Transaksi
-            </a>
+        .cashier-icon {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #eaf5ec;
+            color: #2e7d32;
+        }
 
-        </div>
+        .cashier-icon iconify-icon {
+            font-size: 15px;
+        }
 
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 55px 20px;
+        }
 
-        <!-- PESAN SUCCESS -->
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            background: #eaf5ec;
+            color: #2e7d32;
+        }
 
+        .empty-icon iconify-icon {
+            font-size: 30px;
+        }
 
-        <!-- TABEL TRANSAKSI -->
-        <div class="card shadow-sm">
+        .empty-title {
+            margin-bottom: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+        }
 
-            <div class="card-body">
+        .empty-description {
+            margin-bottom: 18px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+    </style>
 
-                <div class="table-responsive">
-
-                    <table class="table table-bordered table-hover align-middle">
-
-                        <thead class="table-success">
-
-                            <tr>
-                                <th>No</th>
-                                <th>Nomor Transaksi</th>
-                                <th>Tanggal</th>
-                                <th>Kasir</th>
-                                <th>Total</th>
-                                <th>Aksi</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @forelse($transaksi as $item)
-
-                                <tr>
-
-                                    <td>
-                                        {{ $loop->iteration }}
-                                    </td>
-
-                                    <td>
-                                        <strong>
-                                            {{ $item->nomor_transaksi }}
-                                        </strong>
-                                    </td>
-
-                                    <td>
-                                        {{ $item->tanggal_transaksi->format('d-m-Y H:i') }}
-                                    </td>
-
-                                    <td>
-                                        {{ $item->user->nama ?? '-' }}
-                                    </td>
-
-                                    <td>
-                                        Rp {{ number_format($item->total, 0, ',', '.') }}
-                                    </td>
-
-                                    <td>
-
-                                        <a href="{{ route('transaksi.show', $item->id) }}"
-                                           class="btn btn-sm btn-outline-success">
-                                            Detail
-                                        </a>
-
-                                    </td>
-
-                                </tr>
-
-                            @empty
-
-                                <tr>
-
-                                    <td colspan="6"
-                                        class="text-center text-muted py-4">
-
-                                        Belum ada transaksi penjualan.
-
-                                    </td>
-
-                                </tr>
-
-                            @endforelse
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</body>
-</html>
+</x-layout>

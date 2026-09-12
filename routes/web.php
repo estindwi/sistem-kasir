@@ -4,6 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiPenjualanController;
 use App\Http\Controllers\KategoriPengeluaranController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\FinancialReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,9 +28,8 @@ Route::middleware('auth')->group(function () {
         return view('components-preview');
     })->name('components.preview');
 
-    Route::get('/dashboard', function () {
-        return 'Selamat datang di Dashboard Sistem Kasir Hidroponik!';
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
 
     Route::get('/produk', [ProdukController::class, 'index'])
         ->name('produk.index');
@@ -82,4 +84,25 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/kategori-pengeluaran/{id}', [KategoriPengeluaranController::class, 'destroy'])
         ->name('kategori-pengeluaran.destroy');
+
+    Route::get('/pengeluaran', [PengeluaranController::class, 'index'])
+    ->name('pengeluaran.index');
+
+    Route::get('/pengeluaran/create', [PengeluaranController::class, 'create'])
+        ->name('pengeluaran.create');
+
+    Route::post('/pengeluaran', [PengeluaranController::class, 'store'])
+        ->name('pengeluaran.store');
+
+    Route::get('/pengeluaran/{id}/edit', [PengeluaranController::class, 'edit'])
+        ->name('pengeluaran.edit');
+
+    Route::put('/pengeluaran/{id}', [PengeluaranController::class, 'update'])
+        ->name('pengeluaran.update');
+
+    Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy'])
+        ->name('pengeluaran.destroy');
+
+    Route::get('/laporan-keuangan', [FinancialReportController::class, 'index'])
+    ->name('laporan-keuangan.index');
 });

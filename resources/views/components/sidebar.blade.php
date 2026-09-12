@@ -1,333 +1,307 @@
-<div class="col-md-3 col-lg-2 sidebar p-0">
+<aside class="app-sidebar">
 
-    <div class="sidebar-wrapper">
+    {{-- BRAND --}}
+    <div class="sidebar-brand">
 
-        {{-- BRAND --}}
-        <div class="brand-section">
-            <div class="brand-icon">
-                <x-icon name="lucide:leaf" />
-            </div>
-
-            <div>
-                <div class="brand-title">
-                    Hidroponik
-                </div>
-
-                <div class="brand-subtitle">
-                    Kasir System
-                </div>
-            </div>
+        <div class="brand-icon">
+            <x-icon name="lucide:leaf" />
         </div>
 
-
-        {{-- MENU --}}
-        <div class="menu-section">
-
-            <div class="menu-label">
-                MENU UTAMA
-            </div>
-
-
-            {{-- Dashboard --}}
-            <a
-                href="{{ route('dashboard') }}"
-                class="menu-item {{ $active === 'dashboard' ? 'active' : '' }}"
-            >
-
-                <span class="menu-icon">
-                    <x-icon name="lucide:layout-dashboard" />
-                </span>
-
-                <span class="menu-text">
-                    Dashboard
-                </span>
-
-            </a>
-
-
-            {{-- Produk --}}
-            <a
-                href="{{ route('produk.index') }}"
-                class="menu-item {{ $active === 'produk' ? 'active' : '' }}"
-            >
-
-                <span class="menu-icon">
-                    <x-icon name="lucide:package" />
-                </span>
-
-                <span class="menu-text">
-                    Produk
-                </span>
-
-            </a>
-
-
-            {{-- Transaksi --}}
-            <a
-                href="{{ route('transaksi.index') }}"
-                class="menu-item {{ $active === 'transaksi' ? 'active' : '' }}"
-            >
-
-                <span class="menu-icon">
-                    <x-icon name="lucide:shopping-cart" />
-                </span>
-
-                <span class="menu-text">
-                    Transaksi Penjualan
-                </span>
-
-            </a>
-
-
-            {{-- Kategori Pengeluaran --}}
-            <a
-                href="{{ route('kategori-pengeluaran.index') }}"
-                class="menu-item {{ $active === 'kategori' ? 'active' : '' }}"
-            >
-
-                <span class="menu-icon">
-                    <x-icon name="lucide:tags" />
-                </span>
-
-                <span class="menu-text">
-                    Kategori Pengeluaran
-                </span>
-
-            </a>
-
-
-            {{-- Pengeluaran --}}
-            <a
-                href="#"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    <x-icon name="lucide:wallet" />
-                </span>
-
-                <span class="menu-text">
-                    Pengeluaran
-                </span>
-
-            </a>
-
-
-            {{-- Laporan --}}
-            <a
-                href="#"
-                class="menu-item"
-            >
-
-                <span class="menu-icon">
-                    <x-icon name="lucide:chart-no-axes-combined" />
-                </span>
-
-                <span class="menu-text">
-                    Laporan Keuangan
-                </span>
-
-            </a>
-
-        </div>
-
-
-        {{-- BOTTOM --}}
-        <div class="sidebar-bottom">
-
-            <div class="user-box">
-
-                <div class="user-avatar">
-                    <x-icon name="lucide:user-round" />
-                </div>
-
-                <div class="user-info">
-
-                    <div class="user-name">
-                        {{ auth()->user()->nama ?? 'User' }}
-                    </div>
-
-                    <div class="user-role">
-                        Kasir
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <form
-                action="{{ route('logout') }}"
-                method="POST"
-            >
-
-                @csrf
-
-                <button
-                    type="submit"
-                    class="logout-button"
-                >
-
-                    <x-icon name="lucide:log-out" />
-
-                    <span>
-                        Keluar
-                    </span>
-
-                </button>
-
-            </form>
-
+        <div class="brand-text">
+            <strong>Hidroponik</strong>
+            <span>Kasir System</span>
         </div>
 
     </div>
 
-</div>
+
+    {{-- MENU --}}
+    <div class="sidebar-menu">
+
+        <div class="menu-label">
+            MENU UTAMA
+        </div>
+
+
+        <a
+            href="{{ route('dashboard') }}"
+            class="sidebar-link {{ $active === 'dashboard' ? 'active' : '' }}"
+        >
+            <x-icon name="lucide:layout-dashboard" />
+            <span>Dashboard</span>
+        </a>
+
+
+        <a
+            href="{{ route('produk.index') }}"
+            class="sidebar-link {{ $active === 'produk' ? 'active' : '' }}"
+        >
+            <x-icon name="lucide:package" />
+            <span>Produk</span>
+        </a>
+
+
+        <a
+            href="{{ route('transaksi.index') }}"
+            class="sidebar-link {{ $active === 'transaksi' ? 'active' : '' }}"
+        >
+            <x-icon name="lucide:shopping-cart" />
+            <span>Transaksi Penjualan</span>
+        </a>
+
+
+        <a
+            href="{{ route('kategori-pengeluaran.index') }}"
+            class="sidebar-link {{ $active === 'kategori-pengeluaran' ? 'active' : '' }}"
+        >
+            <x-icon name="lucide:tags" />
+            <span>Kategori Pengeluaran</span>
+        </a>
+
+
+        <a
+            href="{{ route('pengeluaran.index') }}"
+            class="sidebar-link {{ $active === 'pengeluaran' ? 'active' : '' }}"
+        >
+            <x-icon name="lucide:wallet" />
+            <span>Pengeluaran</span>
+        </a>
+
+
+        <a
+            href="{{ route('laporan-keuangan.index') }}"
+            class="sidebar-link {{ $active === 'laporan-keuangan' ? 'active' : '' }}"
+        >
+            <x-icon name="lucide:chart-no-axes-combined" />
+            <span>Laporan Keuangan</span>
+        </a>
+
+    </div>
+
+
+    {{-- USER AREA --}}
+    <div class="sidebar-footer">
+
+        <div class="user-box">
+
+            <div class="user-avatar">
+                <x-icon name="lucide:user-round" />
+            </div>
+
+            <div class="user-info">
+
+                <strong>
+                    {{ auth()->user()->nama }}
+                </strong>
+
+                <span>
+                    Owner Hidroponik
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <form
+            action="{{ route('logout') }}"
+            method="POST"
+            class="logout-form"
+        >
+            @csrf
+
+            <button
+                type="submit"
+                class="sidebar-logout"
+            >
+                <x-icon name="lucide:log-out" />
+                <span>Keluar</span>
+            </button>
+
+        </form>
+
+    </div>
+
+</aside>
 
 
 <style>
 
-    .sidebar {
-        min-height: 100vh;
-        background: #ffffff;
-        border-right: 1px solid #e9ecef;
-    }
+    .app-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
 
+        width: 250px;
+        height: 100vh;
 
-    .sidebar-wrapper {
-        min-height: 100vh;
         display: flex;
         flex-direction: column;
-        padding: 24px 16px;
+
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+
+        z-index: 1000;
     }
 
 
     /* BRAND */
 
-    .brand-section {
+    .sidebar-brand {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 4px 8px 30px;
+        gap: 11px;
+
+        height: 76px;
+
+        padding: 16px 18px;
+
+        flex-shrink: 0;
+
+        border-bottom: 1px solid #f0f1f1;
     }
 
 
     .brand-icon {
-        width: 42px;
-        height: 42px;
+        width: 39px;
+        height: 39px;
 
         display: flex;
         align-items: center;
         justify-content: center;
 
-        background: #198754;
+        flex-shrink: 0;
+
+        border-radius: 11px;
+
+        background: #2e7d32;
         color: white;
-
-        border-radius: 12px;
-
-        font-size: 21px;
     }
 
 
-    .brand-title {
-        font-size: 17px;
-        font-weight: 700;
-        color: #212529;
+    .brand-icon iconify-icon {
+        font-size: 20px;
+    }
+
+
+    .brand-text {
+        display: flex;
+        flex-direction: column;
         line-height: 1.2;
     }
 
 
-    .brand-subtitle {
-        font-size: 12px;
-        color: #8a8f98;
+    .brand-text strong {
+        color: #1f2937;
+        font-size: 15px;
+    }
+
+
+    .brand-text span {
         margin-top: 2px;
+
+        color: #9ca3af;
+        font-size: 11px;
     }
 
 
     /* MENU */
 
-    .menu-section {
+    .sidebar-menu {
         flex: 1;
+
+        min-height: 0;
+
+        padding: 20px 14px;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+
+    .sidebar-menu::-webkit-scrollbar {
+        width: 5px;
+    }
+
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+        background: #d8dfda;
+        border-radius: 10px;
     }
 
 
     .menu-label {
-        padding: 0 12px;
-        margin-bottom: 10px;
+        padding: 0 11px;
+        margin-bottom: 9px;
+
+        color: #9ca3af;
 
         font-size: 10px;
         font-weight: 700;
-        letter-spacing: .08em;
 
-        color: #9aa0a6;
+        letter-spacing: 0.08em;
     }
 
 
-    .menu-item {
+    .sidebar-link {
         display: flex;
         align-items: center;
+        gap: 11px;
 
-        gap: 12px;
+        min-height: 44px;
 
-        width: 100%;
+        padding: 10px 12px;
 
-        padding: 11px 12px;
         margin-bottom: 4px;
 
         border-radius: 10px;
 
+        color: #6b7280;
+
         text-decoration: none;
 
-        color: #6c757d;
-
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
 
         transition:
-            background-color .2s ease,
-            color .2s ease,
-            transform .2s ease;
+            background 0.2s ease,
+            color 0.2s ease;
     }
 
 
-    .menu-item:hover {
-        background: #f3f7f5;
-        color: #198754;
+    .sidebar-link iconify-icon {
+        width: 19px;
+
+        flex-shrink: 0;
+
+        font-size: 18px;
     }
 
 
-    .menu-item.active {
-        background: #eaf6ef;
-        color: #198754;
+    .sidebar-link:hover {
+        background: #f3f8f4;
+        color: #2e7d32;
+    }
+
+
+    .sidebar-link.active {
+        background: #eaf5ec;
+        color: #2e7d32;
+
         font-weight: 600;
     }
 
 
-    .menu-icon {
-        width: 20px;
-        height: 20px;
+    /* FOOTER */
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-size: 19px;
-
+    .sidebar-footer {
         flex-shrink: 0;
-    }
 
+        padding: 14px;
 
-    .menu-text {
-        white-space: nowrap;
-    }
+        border-top: 1px solid #f0f1f1;
 
-
-    /* BOTTOM */
-
-    .sidebar-bottom {
-        border-top: 1px solid #eeeeee;
-        padding-top: 18px;
-        margin-top: 20px;
+        background: #ffffff;
     }
 
 
@@ -336,7 +310,13 @@
         align-items: center;
         gap: 10px;
 
-        padding: 10px 8px 14px;
+        padding: 10px;
+
+        margin-bottom: 9px;
+
+        border-radius: 11px;
+
+        background: #f7f9f8;
     }
 
 
@@ -348,83 +328,99 @@
         align-items: center;
         justify-content: center;
 
+        flex-shrink: 0;
+
         border-radius: 50%;
 
-        background: #f0f2f4;
-        color: #6c757d;
+        background: #e1f0e4;
+        color: #2e7d32;
+    }
 
+
+    .user-avatar iconify-icon {
         font-size: 17px;
     }
 
 
     .user-info {
         min-width: 0;
+
+        display: flex;
+        flex-direction: column;
     }
 
 
-    .user-name {
-        font-size: 13px;
-        font-weight: 600;
-
-        color: #212529;
-
-        white-space: nowrap;
+    .user-info strong {
         overflow: hidden;
+
+        color: #374151;
+
+        font-size: 12px;
+        font-weight: 700;
+
         text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
 
-    .user-role {
-        font-size: 11px;
-        color: #9aa0a6;
+    .user-info span {
         margin-top: 2px;
+
+        color: #9ca3af;
+
+        font-size: 10px;
     }
 
 
-    .logout-button {
+    .logout-form {
+        margin: 0;
+    }
+
+
+    .sidebar-logout {
         width: 100%;
 
         display: flex;
         align-items: center;
         justify-content: center;
-
         gap: 8px;
 
-        padding: 10px 12px;
+        min-height: 40px;
 
-        border: 1px solid #e4e6e8;
+        border: 1px solid #e5e7eb;
         border-radius: 9px;
 
         background: #ffffff;
-        color: #6c757d;
 
-        font-size: 13px;
-        font-weight: 500;
+        color: #6b7280;
 
-        transition: all .2s ease;
+        font-size: 12px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
     }
 
 
-    .logout-button:hover {
+    .sidebar-logout:hover {
+        border-color: #fecaca;
+
         background: #fff5f5;
-        border-color: #f1caca;
-        color: #dc3545;
+
+        color: #dc2626;
     }
 
 
-    /* MOBILE */
-
-    @media (max-width: 767px) {
-
-        .sidebar {
-            min-height: auto;
-            border-right: none;
-            border-bottom: 1px solid #e9ecef;
-        }
+    .sidebar-logout iconify-icon {
+        font-size: 16px;
+    }
 
 
-        .sidebar-wrapper {
-            min-height: auto;
+    @media (max-width: 768px) {
+
+        .app-sidebar {
+            width: 220px;
         }
 
     }

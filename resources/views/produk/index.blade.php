@@ -1,349 +1,405 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<x-layout active="produk">
 
-    <title>Produk - Sistem Kasir Hidroponik</title>
+    {{-- BREADCRUMB --}}
+    <x-breadcrumb
+        :items="[
+            ['label' => 'Produk']
+        ]"
+    />
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
+
+    {{-- PAGE HEADER --}}
+    <x-page-header
+        title="Produk"
+        description="Kelola produk hidroponik dan pantau stok yang tersedia."
     >
 
+        <x-button
+            variant="success"
+            :href="route('produk.create')"
+        >
+            <x-icon name="lucide:plus" />
+            Tambah Produk
+        </x-button>
+
+    </x-page-header>
+
+
+    {{-- PRODUCT TABLE --}}
+    <x-card>
+
+        <x-table>
+
+            <thead>
+
+                <tr>
+
+                    <th class="ps-3">
+                        No
+                    </th>
+
+                    <th>
+                        Produk
+                    </th>
+
+                    <th>
+                        Harga
+                    </th>
+
+                    <th>
+                        Stok
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th class="text-end pe-3">
+                        Aksi
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @forelse($produk as $item)
+
+                    <tr>
+
+                        {{-- NOMOR --}}
+                        <td class="ps-3">
+                            {{ $loop->iteration }}
+                        </td>
+
+
+                        {{-- PRODUK --}}
+                        <td>
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                <div class="product-icon">
+
+                                    <x-icon name="lucide:leaf" />
+
+                                </div>
+
+                                <div>
+
+                                    <div class="product-name">
+                                        {{ $item->nama_produk }}
+                                    </div>
+
+                                    <div class="product-subtitle">
+                                        Produk hidroponik
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        {{-- HARGA --}}
+                        <td>
+
+                            <span class="fw-semibold">
+                                Rp {{ number_format($item->harga, 0, ',', '.') }}
+                            </span>
+
+                        </td>
+
+
+                        {{-- STOK --}}
+                        <td>
+
+                            @if($item->status)
+
+                                @if($item->stok <= 0)
+
+                                    <x-badge variant="danger">
+                                        Habis
+                                    </x-badge>
+
+                                @elseif($item->stok <= 10)
+
+                                    <x-badge variant="warning">
+                                        {{ $item->stok }} stok
+                                    </x-badge>
+
+                                @else
+
+                                    <span class="fw-semibold">
+                                        {{ $item->stok }}
+                                    </span>
+
+                                @endif
+
+                            @else
+
+                                <span class="text-muted">
+                                    {{ $item->stok }}
+                                </span>
+
+                            @endif
+
+                        </td>
+
+
+                        {{-- STATUS --}}
+                        <td>
+
+                            @if($item->status)
+
+                                <x-badge variant="success">
+                                    Aktif
+                                </x-badge>
+
+                            @else
+
+                                <x-badge variant="secondary">
+                                    Tidak Aktif
+                                </x-badge>
+
+                            @endif
+
+                        </td>
+
+
+                        {{-- AKSI --}}
+                        <td class="text-end pe-3">
+
+                            <div class="d-flex justify-content-end gap-1">
+
+                                {{-- EDIT --}}
+                                <x-button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    :href="route('produk.edit', $item->id)"
+                                >
+                                    <x-icon name="lucide:pencil" />
+                                </x-button>
+
+
+                                {{-- NONAKTIFKAN --}}
+                                @if($item->status)
+
+                                   <form
+                                        action="{{ route('produk.deactivate', $item->id) }}"
+                                        method="POST"
+                                        class="d-inline"
+                                    >
+                                        @csrf
+                                        @method('PUT')
+
+                                        <x-button
+                                            variant="outline-danger"
+                                            size="sm"
+                                            type="submit"
+                                            data-confirm-title="Nonaktifkan produk?"
+                                            data-confirm="Produk ini tidak akan dapat digunakan dalam transaksi baru. Apakah kamu yakin ingin melanjutkan?"
+                                            data-confirm-button="Ya, nonaktifkan"
+                                            data-cancel-button="Batal"
+                                        >
+                                            <x-icon name="lucide:ban" />
+                                        </x-button>
+                                    </form>
+                                @endif
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+
+                        <td colspan="6">
+
+                            <div class="empty-state">
+
+                                <div class="empty-icon">
+
+                                    <x-icon name="lucide:package-open" />
+
+                                </div>
+
+                                <h5>
+                                    Belum ada produk
+                                </h5>
+
+                                <p>
+                                    Tambahkan produk hidroponik pertama kamu.
+                                </p>
+
+                                <x-button
+                                    variant="success"
+                                    :href="route('produk.create')"
+                                >
+                                    <x-icon name="lucide:plus" />
+                                    Tambah Produk
+                                </x-button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </x-table>
+
+    </x-card>
+
+
     <style>
-        body {
-            background-color: #f5f7f6;
+
+        /* =========================
+           PRODUCT
+        ========================= */
+
+        .product-icon {
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            background: rgba(46, 125, 50, .09);
+            color: #2E7D32;
+
+            font-size: 17px;
         }
 
-        .sidebar {
-            min-height: 100vh;
-            background: #198754;
-        }
-
-        .brand {
-            color: white;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .sidebar a {
-            color: rgba(255,255,255,.85);
-            text-decoration: none;
-            display: block;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-        }
-
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: rgba(255,255,255,.15);
-            color: white;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .page-title {
-            font-weight: 700;
-        }
-
-        .card {
-            border: none;
-            border-radius: 16px;
-        }
-
-        .table {
-            vertical-align: middle;
-        }
-
-        .table thead th {
-            font-size: 14px;
-            color: #6c757d;
-            font-weight: 600;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .table tbody td {
-            padding-top: 16px;
-            padding-bottom: 16px;
-        }
 
         .product-name {
+            font-size: 13px;
             font-weight: 600;
+            color: #26352a;
         }
 
-        .btn {
-            border-radius: 8px;
+
+        .product-subtitle {
+            margin-top: 2px;
+
+            font-size: 11px;
+            color: #98a19b;
         }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
 
         .empty-state {
-            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 55px 20px;
+
             text-align: center;
-            color: #6c757d;
         }
+
+
+        .empty-icon {
+            width: 54px;
+            height: 54px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 14px;
+
+            border-radius: 14px;
+
+            background: rgba(46, 125, 50, .08);
+            color: #2E7D32;
+
+            font-size: 25px;
+        }
+
+
+        .empty-state h5 {
+            margin-bottom: 6px;
+
+            font-size: 15px;
+            font-weight: 700;
+
+            color: #344238;
+        }
+
+
+        .empty-state p {
+            margin-bottom: 18px;
+
+            font-size: 12px;
+            color: #98a19b;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table thead th {
+            padding-top: 13px;
+            padding-bottom: 13px;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            color: #87908a;
+
+            text-transform: uppercase;
+            letter-spacing: .03em;
+
+            border-bottom: 1px solid #e8ede9;
+        }
+
+
+        .table tbody td {
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+            font-size: 13px;
+
+            color: #4e5a51;
+
+            border-bottom: 1px solid #f0f2f0;
+        }
+
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        .table tbody tr {
+            transition: background .15s ease;
+        }
+
+
+        .table tbody tr:hover {
+            background: #fafcfb;
+        }
+
     </style>
-</head>
 
-<body>
-
-<div class="container-fluid">
-    <div class="row">
-
-        <!-- SIDEBAR -->
-        <div class="col-md-3 col-lg-2 sidebar p-3">
-
-            <div class="brand mb-4">
-                🌱 Hidroponik
-            </div>
-
-            <small class="text-white-50">MENU UTAMA</small>
-
-            <div class="mt-2">
-
-                <a href="{{ route('dashboard') }}">
-                    📊 Dashboard
-                </a>
-
-                <a href="{{ route('produk.index') }}" class="active">
-                    📦 Produk
-                </a>
-
-                <a href="#">
-                    🛒 Transaksi Penjualan
-                </a>
-
-                <a href="#">
-                    💸 Pengeluaran
-                </a>
-
-                <a href="#">
-                    📈 Laporan Keuangan
-                </a>
-
-            </div>
-
-            <hr class="text-white">
-
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-
-                <button class="btn btn-outline-light w-100">
-                    Keluar
-                </button>
-            </form>
-
-        </div>
-
-
-        <!-- CONTENT -->
-        <div class="col-md-9 col-lg-10 content">
-
-            <!-- HEADER -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-
-                <div>
-                    <h2 class="page-title mb-1">
-                        Produk
-                    </h2>
-
-                    <p class="text-muted mb-0">
-                        Kelola data produk hidroponik dan stok yang tersedia.
-                    </p>
-                </div>
-
-                <a
-                    href="{{ route('produk.create') }}"
-                    class="btn btn-success px-4"
-                >
-                    + Tambah Produk
-                </a>
-
-            </div>
-
-
-            <!-- SUCCESS MESSAGE -->
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show">
-                    {{ session('success') }}
-
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                    ></button>
-                </div>
-            @endif
-
-
-            <!-- PRODUCT TABLE -->
-            <div class="card shadow-sm">
-
-                <div class="card-body p-0">
-
-                    <div class="table-responsive">
-
-                        <table class="table mb-0">
-
-                            <thead>
-                                <tr>
-                                    <th class="ps-4">No</th>
-                                    <th>Produk</th>
-                                    <th>Harga</th>
-                                    <th>Stok</th>
-                                    <th>Status</th>
-                                    <th class="text-center pe-4">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                @forelse ($produk as $item)
-
-                                    <tr>
-
-                                        <td class="ps-4">
-                                            {{ $loop->iteration }}
-                                        </td>
-
-                                        <td>
-                                            <div class="product-name">
-                                                {{ $item->nama_produk }}
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            Rp {{ number_format($item->harga, 0, ',', '.') }}
-                                        </td>
-
-                                        <td>
-
-                                            @if ($item->stok <= 10 && $item->status)
-                                                <span class="text-danger fw-semibold">
-                                                    {{ $item->stok }}
-                                                </span>
-
-                                                <small class="text-danger">
-                                                    (Stok rendah)
-                                                </small>
-                                            @else
-                                                {{ $item->stok }}
-                                            @endif
-
-                                        </td>
-
-                                        <td>
-
-                                            @if ($item->status)
-
-                                                <span class="badge bg-success">
-                                                    Aktif
-                                                </span>
-
-                                            @else
-
-                                                <span class="badge bg-secondary">
-                                                    Tidak Aktif
-                                                </span>
-
-                                            @endif
-
-                                        </td>
-
-                                        <td class="text-center pe-4">
-
-                                            <a
-                                                href="{{ route('produk.edit', $item->id) }}"
-                                                class="btn btn-sm btn-outline-primary"
-                                            >
-                                                Edit
-                                            </a>
-
-
-                                            @if ($item->status)
-
-                                                <form
-                                                    action="{{ route('produk.deactivate', $item->id) }}"
-                                                    method="POST"
-                                                    class="d-inline"
-                                                >
-                                                    @csrf
-                                                    @method('PUT')
-
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn-sm btn-outline-danger"
-                                                        onclick="return confirm('Yakin ingin menonaktifkan produk ini?')"
-                                                    >
-                                                        Nonaktifkan
-                                                    </button>
-
-                                                </form>
-
-                                            @endif
-
-                                        </td>
-
-                                    </tr>
-
-                                @empty
-
-                                    <tr>
-
-                                        <td colspan="6">
-
-                                            <div class="empty-state">
-
-                                                <div class="fs-1 mb-3">
-                                                    📦
-                                                </div>
-
-                                                <h5>
-                                                    Belum ada produk
-                                                </h5>
-
-                                                <p class="mb-3">
-                                                    Tambahkan produk hidroponik pertama kamu.
-                                                </p>
-
-                                                <a
-                                                    href="{{ route('produk.create') }}"
-                                                    class="btn btn-success"
-                                                >
-                                                    + Tambah Produk
-                                                </a>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                @endforelse
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
-
-</body>
-</html>
+</x-layout>
